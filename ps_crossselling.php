@@ -164,7 +164,7 @@ class Ps_Crossselling extends Module implements WidgetInterface
         $helper->show_toolbar = false;
         $helper->table = $this->table;
         $helper->default_form_language = $lang->id;
-        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ?: 0;
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'submitCross';
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) .
@@ -197,7 +197,7 @@ class Ps_Crossselling extends Module implements WidgetInterface
     private function getProductIds($hookName, array $configuration)
     {
         if ('displayShoppingCart' === $hookName || 'displayShoppingCartFooter' === $hookName) {
-            $productIds = array_map(function ($elem) {
+            $productIds = array_map(function (array $elem) {
                 return $elem['id_product'];
             }, $configuration['cart']->getProducts());
         } else {
@@ -296,27 +296,15 @@ class Ps_Crossselling extends Module implements WidgetInterface
 
             $presenterFactory = new ProductPresenterFactory($this->context);
             $presentationSettings = $presenterFactory->getPresentationSettings();
-            if (version_compare(_PS_VERSION_, '1.7.5', '>=')) {
-                $presenter = new \PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductListingPresenter(
-                    new ImageRetriever(
-                        $this->context->link
-                    ),
-                    $this->context->link,
-                    new PriceFormatter(),
-                    new ProductColorsRetriever(),
-                    $this->context->getTranslator()
-                );
-            } else {
-                $presenter = new \PrestaShop\PrestaShop\Core\Product\ProductListingPresenter(
-                    new ImageRetriever(
-                        $this->context->link
-                    ),
-                    $this->context->link,
-                    new PriceFormatter(),
-                    new ProductColorsRetriever(),
-                    $this->context->getTranslator()
-                );
-            }
+            $presenter = new \PrestaShop\PrestaShop\Core\Product\ProductListingPresenter(
+                new ImageRetriever(
+                    $this->context->link
+                ),
+                $this->context->link,
+                new PriceFormatter(),
+                new ProductColorsRetriever(),
+                $this->context->getTranslator()
+            );
 
             // Now, we can present the products for the template.
             $productsForTemplate = [];
