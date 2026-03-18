@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -35,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
 
 class Ps_Crossselling extends Module implements WidgetInterface
 {
-    const LIMIT_FACTOR = 50;
+    public const LIMIT_FACTOR = 50;
     private $templateFile;
 
     public function __construct()
@@ -273,7 +275,8 @@ class Ps_Crossselling extends Module implements WidgetInterface
                 $sql_groups_where = 'AND cg.`id_group` ' . (count($groups) ? 'IN (' . implode(',', $groups) . ')' : '=' . (int) Group::getCurrent()->id);
             }
 
-            $order_products = Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS('
+            $order_products = Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS(
+                '
                 SELECT DISTINCT od.product_id
                 FROM ' . _DB_PREFIX_ . 'order_detail od
                 LEFT JOIN ' . _DB_PREFIX_ . 'product p ON (p.id_product = od.product_id)
