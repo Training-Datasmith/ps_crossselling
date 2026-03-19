@@ -206,7 +206,7 @@ class Ps_Crossselling extends Module implements WidgetInterface
             $productIds = [$configuration['product']['id_product']];
         }
 
-        return array_unique($productIds);
+        return array_unique(array_map('intval', $productIds));
     }
 
     public function getWidgetVariables($hookName, array $configuration)
