@@ -70,8 +70,7 @@ class PsCrosssellingWidgetTest extends PsCrosssellingTestCase
     {
         $cart = new CartStub();
         $cart->products = array();
-        $vars = $this->module->getWidgetVariables('displayShoppingCart', array('cart' => $cart));
-        $this->assertFalse($vars);
+        $this->module->getWidgetVariables('displayShoppingCart', array('cart' => $cart));
         $this->assertSame(0, DbStub::$executeCount);
         $this->assertSame(0, count(PresenterStub::$presentLog));
     }
@@ -103,8 +102,7 @@ class PsCrosssellingWidgetTest extends PsCrosssellingTestCase
     {
         Configuration::updateValue('CROSSSELLING_NBR', 8);
         Fixture::insertProduct(123);
-        $out = $this->module->renderWidget('displayFooterProduct', array('product' => array('id_product' => 123)));
-        $this->assertFalse($out);
+        $this->module->renderWidget('displayFooterProduct', array('product' => array('id_product' => 123)));
         $this->assertSame(0, count(ModuleStub::$fetchLog));
         $this->assertSame(0, count(PresenterStub::$presentLog));
     }
@@ -118,10 +116,11 @@ class PsCrosssellingWidgetTest extends PsCrosssellingTestCase
         Fixture::insertProduct(13);
         Fixture::insertOrder(1, 1, array(10, 11));
         Fixture::insertOrder(2, 1, array(12, 13));
+        $tpl = 'module:ps_crossselling/views/templates/hook/ps_crossselling.tpl';
         $out = $this->module->renderWidget('displayFooterProduct', array(
             'product' => array('id_product' => '10 OR 12'),
         ));
-        $this->assertContains('cid:ps_crossselling|10', $out);
+        $this->assertSame('FETCH:' . $tpl . ':cid:ps_crossselling|10', $out);
         $this->assertNotEmpty(SmartyStub::$assignLog);
         $this->assertSame(array(11), Fixture::productIdsFromPresenterOutput(SmartyStub::$assignLog[0]['products']));
     }

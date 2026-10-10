@@ -33,7 +33,11 @@ class PsCrosssellingConstructorTest extends PsCrosssellingTestCase
         $cmd = 'php -r ' . escapeshellarg(
             'include ' . var_export(dirname(__DIR__) . '/ps_crossselling.php', true) . '; echo "LOADED";'
         );
-        $output = shell_exec($cmd);
-        $this->assertNotContains('LOADED', (string) $output);
+        $lines = array();
+        $status = 0;
+        exec($cmd, $lines, $status);
+        $output = implode("\n", $lines);
+        $this->assertSame(0, $status);
+        $this->assertNotContains('LOADED', $output);
     }
 }

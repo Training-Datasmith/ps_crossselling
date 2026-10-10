@@ -47,8 +47,11 @@ run_expect_fail "testRejectsDisplayPriceOutsideZeroAndOne"
 mutate sed -i 's/(int) \$product_nbr < 1/0 === (int) $product_nbr/' "$MODULE"
 run_expect_fail "testRejectsNegativeProductCount"
 
-mutate perl -0pi -e 's/\n        \$productIds = array_map\('\''intval'\'', \$productIds\);\n//g' "$MODULE"
+mutate perl -0pi -e 's/\n        \$productIds = array_map\('\''intval'\'', \$productIds\);\n\n        return array_unique/\n\n        return array_unique/s' "$MODULE"
 run_expect_fail "testDirtyProductIdIsSanitizedInCacheKeyAndQuery"
+
+mutate perl -0pi -e 's/\n        \$productIds = array_map\('\''intval'\'', \$productIds\);\n\n        \$q_orders/\n\n        \$q_orders/s' "$MODULE"
+run_expect_fail "testGetOrderProductsCastsIdsBeforeQuery"
 
 mutate sed -i 's/AND od.product_id NOT IN/AND od.product_id IN/' "$MODULE"
 run_expect_fail "testExcludesSourceProductAndInvalidOrders"

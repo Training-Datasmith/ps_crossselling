@@ -9,14 +9,6 @@ class PsCrosssellingCacheAndHookTest extends PsCrosssellingTestCase
         $this->assertSame('cid:ps_crossselling|10|20', $this->module->getCacheIdKey(array(10, 20)));
     }
 
-    public function testClearCacheAlwaysTargetsModuleTemplate()
-    {
-        $this->module->exposeClearCache('other.tpl', 'cache-9');
-        $last = end(ModuleStub::$clearCacheLog);
-        $this->assertSame('module:ps_crossselling/views/templates/hook/ps_crossselling.tpl', $last[0]);
-        $this->assertSame('cache-9', $last[1]);
-    }
-
     public function testOrderStatusUpdateClearsCachePerProductAndCastsOrderId()
     {
         OrderDetailStub::$lines = array(

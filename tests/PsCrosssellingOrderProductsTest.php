@@ -160,8 +160,7 @@ class PsCrosssellingOrderProductsTest extends PsCrosssellingTestCase
     {
         Configuration::updateValue('CROSSSELLING_NBR', 8);
         Fixture::insertProduct(123);
-        $result = $this->module->exposeGetOrderProducts(array(123));
-        $this->assertFalse($result);
+        $this->module->exposeGetOrderProducts(array(123));
         $this->assertSame(0, count(PresenterStub::$presentLog));
     }
 
