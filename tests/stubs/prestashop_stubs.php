@@ -393,12 +393,16 @@ class Db
         $this->slave = $slave;
     }
 
-    public static function getInstance($slave = false)
+    public static function getInstance($master = true)
     {
-        DbStub::$slaveFlags[] = (bool) $slave;
+        if (func_num_args() < 1) {
+            DbStub::$slaveFlags[] = true;
+        } else {
+            DbStub::$slaveFlags[] = (bool) $master;
+        }
         DbStub::connect();
 
-        return new self($slave);
+        return new self((bool) $master);
     }
 
     public function executeS($sql)

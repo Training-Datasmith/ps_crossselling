@@ -6,10 +6,17 @@ class PsCrosssellingInstallTest extends PsCrosssellingTestCase
 {
     public function testInstallWritesDefaultsAndRegistersHooks()
     {
+        ConfigurationStub::$values = array();
         $this->assertTrue($this->module->install());
+        $this->assertContains('displayFooterProduct', ModuleStub::$registeredHooks);
+        $this->assertContains('actionOrderStatusPostUpdate', ModuleStub::$registeredHooks);
+        $writtenKeys = array_map(function ($row) {
+            return $row[0];
+        }, ConfigurationStub::$updateLog);
+        $this->assertContains('CROSSSELLING_DISPLAY_PRICE', $writtenKeys);
+        $this->assertContains('CROSSSELLING_NBR', $writtenKeys);
         $this->assertSame(1, Configuration::get('CROSSSELLING_DISPLAY_PRICE'));
         $this->assertSame(8, Configuration::get('CROSSSELLING_NBR'));
-        $this->assertSame(array('displayFooterProduct', 'actionOrderStatusPostUpdate'), ModuleStub::$registeredHooks);
     }
 
     public function testInstallClearsModuleTemplateCacheBeforeParentInstall()

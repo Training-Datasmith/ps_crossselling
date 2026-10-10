@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(-1);
+
 if (PHP_VERSION_ID >= 70000) {
     fwrite(STDERR, "Refusing to run module tests on PHP 7+; use the pinned PHP 5.6 container.\n");
     exit(1);

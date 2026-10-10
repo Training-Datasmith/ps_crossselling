@@ -8,11 +8,14 @@ class PsCrosssellingGetContentTest extends PsCrosssellingTestCase
     {
         Configuration::updateValue('CROSSSELLING_NBR', 8);
         Configuration::updateValue('CROSSSELLING_DISPLAY_PRICE', 1);
+        ConfigurationStub::$updateLog = array();
         $html = $this->module->getContent();
         $this->assertInternalType('string', $html);
         $this->assertNotSame('', $html);
         $this->assertContains('FORM:submitCross', $html);
         $this->assertNotContains('OK:', $html);
+        $this->assertNotContains('ERR:', $html);
+        $this->assertSame(array(), ConfigurationStub::$updateLog);
         $this->assertSame(8, Configuration::get('CROSSSELLING_NBR'));
     }
 
