@@ -2,3 +2,5 @@ config_*.xml
 translations/
 vendor/
 .php_cs.cache
+tests/phpunit-shuffle.xml
+tests/.shuffled-tests.txt

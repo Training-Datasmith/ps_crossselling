@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php"
+         colors="true"
+         processIsolation="true"
+         backupGlobals="false">
+    <testsuites>
+        <testsuite name="ps_crossselling">
+            <directory suffix="Test.php">.</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -85,11 +85,11 @@ class Ps_Crossselling extends Module implements WidgetInterface
         $html = '';
 
         if (Tools::isSubmit('submitCross')) {
-            if (0 != Tools::getValue('displayPrice') && 1 != Tools::getValue('CROSSSELLING_DISPLAY_PRICE')) {
+            if (0 != Tools::getValue('CROSSSELLING_DISPLAY_PRICE') && 1 != Tools::getValue('CROSSSELLING_DISPLAY_PRICE')) {
                 $html .= $this->displayError('Invalid displayPrice');
             } elseif (!($product_nbr = Tools::getValue('CROSSSELLING_NBR')) || empty($product_nbr)) {
                 $html .= $this->displayError($this->trans('You must fill in the "Number of displayed products" field.', [], 'Modules.Crossselling.Admin'));
-            } elseif (0 === (int) $product_nbr) {
+            } elseif ((int) $product_nbr < 1) {
                 $html .= $this->displayError($this->trans('Invalid number.', [], 'Modules.Crossselling.Admin'));
             } else {
                 Configuration::updateValue('CROSSSELLING_DISPLAY_PRICE', (int) Tools::getValue('CROSSSELLING_DISPLAY_PRICE'));
@@ -204,6 +204,8 @@ class Ps_Crossselling extends Module implements WidgetInterface
             $productIds = [$configuration['product']['id_product']];
         }
 
+        $productIds = array_map('intval', $productIds);
+
         return array_unique($productIds);
     }
 
@@ -246,6 +248,8 @@ class Ps_Crossselling extends Module implements WidgetInterface
 
     protected function getOrderProducts(array $productIds = [])
     {
+        $productIds = array_map('intval', $productIds);
+
         $q_orders = 'SELECT o.id_order
         FROM ' . _DB_PREFIX_ . 'orders o
         LEFT JOIN ' . _DB_PREFIX_ . 'order_detail od ON (od.id_order = o.id_order)
